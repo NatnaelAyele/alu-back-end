@@ -12,22 +12,26 @@ if __name__ == "__main__":
         print(f"UsageError: python3 {__file__} employee_id(int)")
         sys.exit(1)
 
-    API_URL = "https://jsonplaceholder.typicode.com"
-    EMPLOYEE_ID = sys.argv[1]
 
-    response = requests.get(
-        f"{API_URL}/users/{EMPLOYEE_ID}/todos",
-        params={"_expand": "user"}
+
+    employee_id = sys.argv[1]
+    base_url = "https://jsonplaceholder.typicode.com"
+
+    user_response = requests.get(f"{base_url}/users/{employee_id}")
+    todos_response = requests.get(
+        f"{base_url}/todos",
+        params={"userId": employee_id}
     )
-    data = response.json()
 
-    if not len(data):
-        print("RequestError:", 404)
-        sys.exit(1)
+    user = user_response.json()
+    todos = todos_response.json()
 
-    employee_name = data[0]["user"]["name"]
-    total_tasks = len(data)
-    done_tasks = [task for task in data if task["completed"]]
+    if user_response.status_code != 200 or todos_response.status_code != 200:
+        sys.exit()
+
+    employee_name = user.get("name")
+    total_tasks = len(todos)
+    done_tasks = [task for task in todos if task["completed"]]
     total_done_tasks = len(done_tasks)
 
     print(f"Employee {employee_name} is done with tasks"
