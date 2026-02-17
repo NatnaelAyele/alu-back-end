@@ -20,11 +20,10 @@ if __name__ == "__main__":
         print("request not successfull")
         sys.exit()
 
-    employee_name = data[0].get("user", {}).get("name")
+    employee_name = data[0]["user"]["name"]
     total_tasks = len(data)
     done_tasks = [task for task in data if task.get("completed")]
     total_done_tasks = len(done_tasks)
-
     print(f"Employee {employee_name} is"
           f" done with tasks({total_done_tasks}/{total_tasks}):")
     for task in done_tasks:
