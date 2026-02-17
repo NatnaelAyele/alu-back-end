@@ -7,43 +7,42 @@ import requests
 import sys
 
 
-def fetch_employee_progress(employee_id):
+def main():
+    if len(sys.argv) != 2:
+        print(f"Usage: {sys.argv[0]} EMPLOYEE_ID", file=sys.stderr)
+        sys.exit(1)
 
-    user_url = "https://jsonplaceholder.typicode.com/users/{}".format(
-        employee_id
-    )
-    todos_url = "https://jsonplaceholder.typicode.com/todos?userId={}".format(
-        employee_id
-    )
+    try:
+        employee_id = int(sys.argv[1])
+    except ValueError:
+        print("id must be an integer", file=sys.stderr)
+        sys.exit(1)
 
-    user_response = requests.get(user_url)
-    todos_response = requests.get(todos_url)
+    base = "https://jsonplaceholder.typicode.com"
 
+    user_response = requests.get(f"{base}/users/{employee_id}")
     if user_response.status_code != 200:
-        return
-
+        sys.exit(1)
     user = user_response.json()
+    employee_name = user.get("name")
+
+    todos_response = requests.get(f"{base}/todos", params={"userId": employee_id})
+    if todos_response.status_code != 200:
+        sys.exit(1)
     todos = todos_response.json()
 
-    employee_name = user.get("name")
-    total_tasks = len(todos)
-    done_tasks = [task for task in todos if task.get("completed") is True]
-    number_of_done_tasks = len(done_tasks)
+    completed = [task for task in todos if task.get("completed") is True]
 
-    print("Employee {} is done with tasks({}/{}):".format(
-        employee_name,
-        number_of_done_tasks,
-        total_tasks
-    ))
+    first_line = (
+        f"Employee {employee_name} is done with tasks"
+        f"({len(completed)}/{len(todos)}):"
+    )
+    print(first_line)
 
-    for task in done_tasks:
-        print("\t {}".format(task.get("title")))
+    for task in completed:
+        title = task.get("title")
+        print("\t {}".format(title))
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        try:
-            employee_id = int(sys.argv[1])
-            fetch_employee_progress(employee_id)
-        except ValueError:
-            pass
+    main()
