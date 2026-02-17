@@ -27,7 +27,7 @@ def fetch_employee_progress(employee_id):
 
     employee_name = user.get("name")
     total_tasks = len(todos)
-    done_tasks = [task for task in todos if task.get("completed")]
+    done_tasks = [task for task in todos if task.get("completed") is True]
     number_of_done_tasks = len(done_tasks)
 
     print("Employee {} is done with tasks({}/{}):".format(
