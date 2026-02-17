@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+"""
+fetch and display names, number of done tasks and names of done tasks for a given user id
+"""
 import requests
 import sys
 
