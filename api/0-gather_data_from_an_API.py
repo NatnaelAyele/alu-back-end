@@ -12,8 +12,6 @@ if __name__ == "__main__":
         print(f"UsageError: python3 {__file__} employee_id(int)")
         sys.exit(1)
 
-
-
     employee_id = sys.argv[1]
     base_url = "https://jsonplaceholder.typicode.com"
 
