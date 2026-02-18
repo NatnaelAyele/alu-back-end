@@ -26,7 +26,8 @@ def main():
     user = user_response.json()
     employee_name = user.get("name")
 
-    todos_response = requests.get(f"{base}/todos", params={"userId": employee_id})
+    todos_response = requests.get(f"{base}/todos",
+                                  params={"userId": employee_id})
     if todos_response.status_code != 200:
         sys.exit(1)
     todos = todos_response.json()
