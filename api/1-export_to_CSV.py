@@ -37,7 +37,7 @@ def main():
         for task in todos:
             writer.writerow(
                 [sys.argv[1], employee_userName,
-                    task["completed"], task["title"]]
+                    str(task["completed"]), task["title"]]
                 )
 
 
